@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Section;
+use Illuminate\Support\Facades\Log;
 
 class SectionsController extends Controller
 {
@@ -16,11 +17,17 @@ class SectionsController extends Controller
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:64',
+            'description' => 'nullable|max:128',
+        ]);
+
         try{
             $section=new Section();
-            $section->name=$request->name;
-            $section->description=$request->description;
+            $section->name=$validatedData['name'];
+            $section->description=$request['description']?? null;
 
             $section->save();
 
@@ -50,10 +57,10 @@ class SectionsController extends Controller
         ]);
         try{
             $section->name=$validatedData['name'];
-            $section->description=$validatedData['description'];
+            $section->description=$validatedData['description']?? null;
             $section->save();
 
-            return redirect()->route('sections.index')->with('seccess','Section updated successfully.');
+            return redirect()->route('sections.index')->with('success','Section updated successfully.');
         }catch (\Exception $ex){
             Log::error($ex);
         }
@@ -64,7 +71,7 @@ class SectionsController extends Controller
     public function destroy(Section $section){
         try{
             $section->delete();
-            return redirect()->route('sections.index')->with('seccess','Section deleted seccesfully');
+            return redirect()->route('sections.index')->with('success','Section deleted seccesfully');
         }catch(\Exception $ex){
             Log::error($ex);
         }

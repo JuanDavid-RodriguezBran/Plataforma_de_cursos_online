@@ -23,14 +23,14 @@
         <tbody>
             @foreach ($sections as $section )
                  <tr>
-                    <td>{{$section->id}}</td>
+                    <td>{{$section->section_id}}</td>
                     <td>{{$section->name}}</td>
                     <td>{{$section->description}}</td>
 
                     <td style="width: 150px;">
-                        <a href="{{ route('sections.edit', $section) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('sections.edit', $section->section_id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                        <form action="{{route('sections.destroy', $section)}}" method="POST" style="display: inline;"
+                        <form action="{{route('sections.destroy', $section->section_id)}}" method="POST" style="display: inline;"
                               onsubmit="return confirm('Are you sure you want to delete this section?');">
                             @csrf
                             @method('DELETE')
