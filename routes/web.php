@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SectionsController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,3 +18,7 @@ Route::get('/sections/{section}/edit', [SectionsController::class, 'edit'])->nam
 Route::put('/sections/{section}', [SectionsController::class, 'update'])->name('sections.update');
 
 Route::delete('/sections/{section}', [SectionsController::class, 'destroy'])->name('sections.destroy');
+
+
+Route::get('/users/create', function() { return view('users.create'); })->name('users.create');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
