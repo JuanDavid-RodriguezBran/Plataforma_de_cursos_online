@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SectionsController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\UserController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +25,7 @@ Route::put('/sections/{section}', [SectionsController::class, 'update'])->name('
 
 Route::delete('/sections/{section}', [SectionsController::class, 'destroy'])->name('sections.destroy');
 
+
 /*
 |--------------------------------------------------------------------------
 | Courses Routes
@@ -35,3 +38,8 @@ Route::get('/courses/{course}', [CoursesController::class, 'show'])->name('cours
 Route::get('/courses/{course}/edit', [CoursesController::class, 'edit'])->name('courses.edit');
 Route::put('/courses/{course}', [CoursesController::class, 'update'])->name('courses.update');
 Route::delete('/courses/{course}', [CoursesController::class, 'destroy'])->name('courses.destroy');
+
+
+Route::get('/users/create', function() { return view('users.create'); })->name('users.create');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
