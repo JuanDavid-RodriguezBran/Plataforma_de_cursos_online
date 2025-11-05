@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('prerequisite_id')->nullable();
 
             //para las foreneas
-            $table->foreign('section_id')->references('id')->on('sections')->onDelete('set null');
+            $table->foreign('section_id')->references('section_id')->on('sections')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('prerequisite_id')->references('course_id')->on('courses')->onDelete('set null');
 

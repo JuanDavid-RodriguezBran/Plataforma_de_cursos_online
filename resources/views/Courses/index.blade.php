@@ -30,9 +30,9 @@
                 <tr>
                     <td>{{ $course->course_id }}</td>
                     <td>{{ $course->title }}</td>
-                    <td>{{ $course->section ? $course->section->name : '—' }}</td>
-                    <td>{{ $course->user ? ($course->user->name ?? ($course->user->first_name . ' ' . $course->user->last_name)) : '—' }}</td>
-                    <td>{{ $course->prerequisite ? $course->prerequisite->title : '—' }}</td>
+                    <td>{{ $course->section ? $course->section->name : '(None))' }}</td>
+                    <td>{{ $course->user ? ($course->user->name ?? ($course->user->first_name . ' ' . $course->user->last_name)) : '(None)' }}</td>
+                    <td>{{ $course->prerequisite ? $course->prerequisite->title : '(No prerequisite)' }}</td>
 
                     <td style="width: 150px;">
                         <a href="{{ route('courses.edit', $course->course_id) }}" class="btn btn-warning btn-sm">Edit</a>

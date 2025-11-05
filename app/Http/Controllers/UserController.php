@@ -34,7 +34,7 @@ class UserController extends Controller
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'id_roles' => $roleId,
+                'role_id' => $roleId,
             ]);
 
             return redirect()->back()->with('success', 'Usuario creado correctamente.');

@@ -28,8 +28,8 @@
             <select class="form-select" name="section_id">
                 <option value="">-- Select Section --</option>
                 @foreach ($sections as $section)
-                    <option value="{{ $section->id }}"
-                        {{ old('section_id', $course->section_id) == $section->id ? 'selected' : '' }}>
+                    <option value="{{ $section->section_id }}"
+                        {{ old('section_id', $course->section_id) == $section->section_id ? 'selected' : '' }}>
                         {{ $section->name }}
                     </option>
                 @endforeach

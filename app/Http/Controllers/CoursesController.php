@@ -31,10 +31,12 @@ class CoursesController extends Controller
         $validatedData=$request->validate([
             'title' => 'required|max:100',
             'description' => 'nullable',
-            'section_id' => 'nullable|exists:sections,id',
+            'section_id' => 'nullable|exists:sections,section_id',
             'user_id' => 'nullable|exists:users,id',
-            'prerequisite_id' => 'nullable|exists:courses,course_id',
+            'prerequisite_id' => 'nullable|integer|exists:courses,course_id',
         ]);
+
+        $validatedData['prerequisite_id'] = $validatedData['prerequisite_id'] ?: null;
 
         try
         {
@@ -66,7 +68,7 @@ class CoursesController extends Controller
         $sections = Section::all();
         $users=User::all();
         $courses=Course::all();
-        return view('courses.edit', ['course' => $course]);
+        return view('courses.edit', compact('course', 'sections', 'users', 'courses'));
     }
 
     public function update(Request $request, Course $course)
@@ -74,10 +76,12 @@ class CoursesController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:100',
             'description' => 'nullable',
-            'section_id' => 'nullable|exists:sections,id',
+            'section_id' => 'nullable|exists:sections,section_id',
             'user_id' => 'nullable|exists:users,id',
             'prerequisite_id' => 'nullable|exists:courses,course_id',
         ]);
+
+        $validatedData['prerequisite_id'] = $validatedData['prerequisite_id'] ?: null;
 
         try {
             $course->title = $validatedData['title'];
