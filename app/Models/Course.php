@@ -8,3 +8,5 @@ class Course extends Model
 {
     //
 }
+
+

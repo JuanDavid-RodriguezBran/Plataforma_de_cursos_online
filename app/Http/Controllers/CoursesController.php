@@ -107,3 +107,4 @@ class CoursesController extends Controller
         return redirect()->route('courses.index')->with('error', 'Error deleting the course.');
     }
 }
+
