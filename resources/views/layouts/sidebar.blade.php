@@ -11,7 +11,7 @@
 
         {{-- Elemento Secciones (Visible para todos temporalmente) --}}
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('sections.*') ? '' : 'collapsed' }}" href="{{ route('sections.index') }}">
+            <a class="nav-link {{ Request::routeIs('section.*') ? '' : 'collapsed' }}" href="{{ route('sections.index') }}">
                 <i class="bi bi-grid"></i>
                 <span>Sections</span>
             </a>
@@ -19,17 +19,17 @@
 
         {{-- Elemento Blogs (Visible para todos temporalmente) --}}
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('courses.*') ? '' : 'collapsed' }}" href="{{ route('courses.index') }}">
+            <a class="nav-link {{ Request::routeIs('course.*') ? '' : 'collapsed' }}" href="{{ route('courses.index') }}">
                 <i class="bi bi-grid"></i>
                 <span>Courses</span>
             </a>
         </li>
 
-        
+
 
         {{-- Elemento Roles (Visible para todos temporalmente) --}}
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('users.*') ? '' : 'collapsed' }}" href="{{ route('users.create') }}">
+            <a class="nav-link {{ Request::routeIs('user.*') ? '' : 'collapsed' }}" href="{{ route('users.create') }}">
                 <i class="bi bi-lock"></i>
                 <span>Users</span>
             </a>
