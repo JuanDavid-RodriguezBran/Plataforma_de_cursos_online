@@ -1,5 +1,6 @@
-<?php
 
+<?php
+/*
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -56,4 +57,23 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+});
+*/
+use App\Http\Controllers\AccountController;
+use Illuminate\Support\Facades\Route;
+
+Route::middleware('guest')->group(function () {
+
+
+    Route::get('login', [AccountController::class, 'login'])
+        ->name('login');
+
+    Route::post('login', [AccountController::class, 'loginPost'])
+         ->name('account.loginPost');
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::post('logout', [AccountController::class, 'logout'])
+         ->name('account.logout');
 });

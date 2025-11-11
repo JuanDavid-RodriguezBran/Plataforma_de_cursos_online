@@ -1,3 +1,6 @@
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 <!-- Vendor JS Files -->
 <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -11,8 +14,7 @@
 <!-- Template Main JS File -->
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
+<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(session()->has('message'))
@@ -31,18 +33,16 @@
 @endif
 
 
-@if($errors->any())
-
-    {{-- <h1>{{ $errors }}</h1> --}}
-
+@if ($errors->any())
     <script>
-
         Swal.fire({
             title: 'Error',
             icon: 'error',
-            html: `<ul> @foreach ($errors as $error) <li class="alert alert-danger">{{ $error }}</li>  @endforeach </ul>`
+            html: `<ul>
+                @foreach ($errors->all() as $error)
+                    <li class="alert alert-danger">{{ $error }}</li>
+                @endforeach
+            </ul>`
         });
-
     </script>
-
 @endif

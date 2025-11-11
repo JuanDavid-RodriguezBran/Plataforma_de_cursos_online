@@ -1,47 +1,92 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="es">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    @include('layouts.head')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <body>
+        <main>
+            <div class="container">
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+                <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+                                <!-- Logo -->
+                                <div class="d-flex justify-content-center py-4">
+                                    <a href="{{ route('home.index') }}" class="logo d-flex align-items-center w-auto">
+                                        <img src="{{ asset('assets/img/logo.png') }}" alt="">
+                                        <span class="d-none d-lg-block">Plataforma de cursos</span>
+                                    </a>
+                                </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+                                <!-- Card -->
+                                <div class="card mb-3 shadow">
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+                                    <div class="card-body">
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+                                        <div class="pt-4 pb-2">
+                                            <h5 class="card-title text-center pb-0 fs-4">Iniciar sesión</h5>
+                                            <p class="text-center small">Ingrese su correo y contraseña para acceder al sistema</p>
+                                        </div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+                                        {{-- Mensaje de error --}}
+                                        @if (session('error'))
+                                            <div class="alert alert-danger">
+                                                {{ session('error') }}
+                                            </div>
+                                        @endif
+
+                                        {{-- Validaciones --}}
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul class="mb-0">
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
+                                        <form method="POST" action="{{ route('account.loginPost') }}" class="row g-3" novalidate>
+                                            @csrf
+
+                                            <div class="col-12">
+                                                <label for="email" class="form-label">Correo electrónico</label>
+                                                <div class="input-group has-validation">
+                                                    <span class="input-group-text">@</span>
+                                                    <input type="email" id="email" name="email"
+                                                        value="{{ old('email') }}"
+                                                        class="form-control @error('email') is-invalid @enderror"
+                                                        required autofocus>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label for="password" class="form-label">Contraseña</label>
+                                                <input type="password" id="password" name="password"
+                                                    class="form-control @error('password') is-invalid @enderror"
+                                                    required>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <button class="btn btn-primary w-100" type="submit">
+                                                    Iniciar sesión
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        @include('layouts.footer')
+        @include('layouts.scripts')
+    </body>
+</html>
+

@@ -29,7 +29,7 @@
         @if(!Auth::check())
 
             <li>
-                <a href="#" class="nav-item">
+                <a href="{{ route('login') }}" class="nav-item">
                     <i class="bi bi-person"></i>
                     Iniciar sesión
                 </a>
@@ -46,8 +46,13 @@
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>{{ Auth::user()->full_name }}</h6>
-                        <span>{{ Auth::user()->role->name }}</span>
+                        @if (Auth::check())
+                            <h6>{{ Auth::user()->full_name ?? Auth::user()->name }}</h6>
+                            <span>{{ Auth::user()->role->name ?? 'Sin rol' }}</span>
+                        @else
+                            <h6>Invitado</h6>
+                            <span>Sin rol</span>
+                        @endif
                     </li>
 
                     <li>

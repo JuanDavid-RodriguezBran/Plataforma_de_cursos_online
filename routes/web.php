@@ -4,11 +4,17 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 include('web/section.php');
 include('web/course.php');
 include('web/user.php');
+include('web/role.php');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
