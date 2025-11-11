@@ -19,7 +19,7 @@ class RoleHelper
         }
     }
 
-    
+
     public static function isAuthorized(string $permission): bool
     {
         try {
