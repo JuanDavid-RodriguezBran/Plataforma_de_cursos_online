@@ -17,6 +17,34 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        // Valida los campos requeridos del usuario
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+
+        // Crea el usuario
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        // Inicia sesión automáticamente después de registrar
+        Auth::login($user);
+
+        // Redirige al home o donde desees
+        return redirect('/');
+    }
+
     public function create(): View
     {
         return view('auth.register');

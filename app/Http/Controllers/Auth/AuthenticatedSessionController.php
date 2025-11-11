@@ -14,6 +14,27 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/');
+        }
+
+        return back()->withErrors([
+            'email' => 'Las credenciales no coinciden.',
+        ])->onlyInput('email');
+    }
     public function create(): View
     {
         return view('auth.login');
@@ -22,6 +43,14 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login');
+    }
+
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
