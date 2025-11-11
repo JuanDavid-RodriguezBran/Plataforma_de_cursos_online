@@ -47,7 +47,13 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6>{{ Auth::user()->full_name }}</h6>
-                        <span>{{ Auth::user()->role->name }}</span>
+                        <span>
+                            @php
+                                $roles = [1 => 'Admin', 2 => 'Profesor', 3 => 'Estudiante'];
+                                $roleId = Auth::user()->role_id;
+                                echo $roles[$roleId] ?? 'Sin rol';
+                            @endphp
+                        </span>
                     </li>
 
                     <li>
@@ -65,7 +71,7 @@
                     </li>
 
                     <li>
-                        <form method="POST" action="{{ route('account.logout') }}" style="display: contents;">
+                        <form method="POST" action="{{ route('logout') }}" style="display: contents;">
                             @csrf
                             <button class="dropdown-item d-flex align-items-center">
                                 <i class="bi bi-box-arrow-right"></i>

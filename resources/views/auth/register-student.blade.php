@@ -17,7 +17,8 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <input type="hidden" name="role" value="student">
+        <!-- Campo oculto para el ID de rol de estudiante -->
+        <input type="hidden" name="role_id" value="3">
 
         <div class="form-group">
             <label for="name">Name</label>
@@ -35,7 +36,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password_confirmation">Password</label>
+            <label for="password_confirmation">Password Confirmation</label>
             <input id="password_confirmation" type="password" name="password_confirmation" required class="form-control">
         </div>
 

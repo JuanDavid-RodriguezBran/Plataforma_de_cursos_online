@@ -36,13 +36,14 @@ class RegisteredUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role_id' => $request->input('role_id'),
         ]);
 
         // Inicia sesión automáticamente después de registrar
         Auth::login($user);
 
-        // Redirige al home o donde desees
-        return redirect('/');
+        // Redirige al dashboard
+        return redirect(route('dashboard'));
     }
 
     /*Se crea los controladores para los formularios de
@@ -79,6 +80,7 @@ public function showTeacherRegistrationForm()
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => $request->input('role_id'),
         ]);
 
         event(new Registered($user));

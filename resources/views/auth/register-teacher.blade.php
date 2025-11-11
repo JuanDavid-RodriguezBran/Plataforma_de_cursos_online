@@ -17,7 +17,8 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <input type="hidden" name="role" value="teacher">
+        <!-- Campo oculto para el ID de rol de Profesor -->
+        <input type="hidden" name="role_id" value="2">
 
         <div class="form-group">
             <label for="name">Name</label>
