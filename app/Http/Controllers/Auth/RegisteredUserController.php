@@ -45,6 +45,18 @@ class RegisteredUserController extends Controller
         return redirect('/');
     }
 
+    /*Se crea los controladores para los formularios de
+    registro de estudiantes y profesores*/
+    public function showStudentRegistrationForm()
+{
+    return view('auth.register-student');  
+}
+
+public function showTeacherRegistrationForm()
+{
+    return view('auth.register-teacher');  
+}
+
     public function create(): View
     {
         return view('auth.register');
