@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'register']);
+/*Se añade el registro de estudiantes y profesores*/
+    Route::get('/register/students', [RegisteredUserController::class, 'showStudentRegistrationForm'])->name('register.students');
+    Route::get('/register/teachers', [RegisteredUserController::class, 'showTeacherRegistrationForm'])->name('register.teachers');
 
     Route::get('/login', [AuthenticatedSessionController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'login']);
