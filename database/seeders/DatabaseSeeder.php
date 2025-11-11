@@ -2,25 +2,46 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\User;
 
-class DatabaseSeeder extends Seeder
+class UserRoleSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Ejecutar el seeder de roles y permisos primero
-        $this->call(RolePermissionSeeder::class);
+        // Crear roles
+        $roles = [
+            ['name' => 'admin'],
+            ['name' => 'instructor'],
+            ['name' => 'student'],
+        ];
 
-        // User::factory(10)->create();
+        foreach ($roles as $roleData) {
+            Role::firstOrCreate($roleData);
+        }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Asignar permisos al rol admin
+        $adminRole = Role::where('name', 'admin')->first();
+        $allPermissions = Permission::all();
+
+        if ($adminRole) {
+            $adminRole->permissions()->sync($allPermissions->pluck('id'));
+        }
+
+        // Crear usuario admin
+        $adminUser = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt('password'),
+            ]
+        );
+
+        if ($adminRole && $adminUser) {
+            $adminUser->roles()->sync([$adminRole->id]);
+        }
     }
 }
+
