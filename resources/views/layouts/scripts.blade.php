@@ -18,20 +18,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(session()->has('message'))
-
     <script>
-
         const message = @json(session('message'));
-
         Swal.fire({
             title: message.content,
             icon: message.type,
         });
-
     </script>
-
 @endif
-
 
 @if ($errors->any())
     <script>
@@ -46,3 +40,7 @@
         });
     </script>
 @endif
+
+<!--  IMPORTANTE: aquí se cargan scripts de las vistas -->
+@stack('scripts')
+

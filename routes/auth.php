@@ -11,11 +11,6 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-    Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
@@ -60,6 +55,8 @@ Route::middleware('auth')->group(function () {
 */
 use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisteredUserController;
+
 
 Route::middleware('guest')->group(function () {
 
@@ -75,4 +72,29 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AccountController::class, 'logout'])
          ->name('account.logout');
+
+Route::get('register', [RegisterController::class, 'show'])
+        ->name('register');
+
+    Route::post('register', [RegisterController::class, 'register'])
+         ->name('register.post');
+
+
+});
+Route::middleware('auth')->group(function () {
+
+    // LOGOUT
+    Route::post('logout', [AccountController::class, 'logout'])
+         ->name('account.logout');
+});
+Route::middleware('guest')->group(function () {
+
+    // Mostrar formulario de registro
+    Route::get('register', [RegisteredUserController::class, 'show'])
+        ->name('register');
+
+    // Guardar usuario
+    Route::post('register', [RegisteredUserController::class, 'register'])
+        ->name('register.post');
+
 });

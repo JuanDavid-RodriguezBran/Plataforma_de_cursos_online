@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    protected $primaryKey = 'course_id'; 
+    protected $primaryKey = 'course_id';
     protected $fillable = [
         'title',
         'description',
@@ -30,6 +30,12 @@ class Course extends Model
     {
         return $this->belongsTo(Course::class, 'prerequisite_id', 'course_id');
     }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'course_id', 'course_id');
+    }
+
 }
 
 

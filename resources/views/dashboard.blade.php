@@ -1,17 +1,49 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+@section('content')
+<div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Inicio</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section dashboard">
+    <div class="row">
+
+        {{-- ============================
+             DASHBOARD ADMINISTRADOR
+        ============================= --}}
+        @if ($role === 'Administrador')
+
+            @include('dashboard.widgets.admin', ['data' => $data])
+
+        @endif
+
+
+
+        {{-- ============================
+              DASHBOARD PROFESOR
+        ============================= --}}
+        @if ($role === 'Profesor')
+
+            @include('dashboard.widgets.teacher', ['data' => $data])
+
+        @endif
+
+
+
+        {{-- ============================
+              DASHBOARD ESTUDIANTE
+        ============================= --}}
+        @if ($role === 'Estudiante')
+
+            @include('dashboard.widgets.student', ['data' => $data])
+
+        @endif
+
     </div>
-</x-app-layout>
+</section>
+@endsection

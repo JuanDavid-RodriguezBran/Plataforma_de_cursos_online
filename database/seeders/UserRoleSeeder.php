@@ -13,84 +13,115 @@ class UserRoleSeeder extends Seeder
 {
     public function run(): void
     {
-        // ====== ROLES ======
-        $adminRole = Role::create(['name' => 'Administrador']);
-        $profesorRole = Role::create(['name' => 'Profesor']);
-        $estudianteRole = Role::create(['name' => 'Estudiante']);
+        // ===============================
+        //        ROLES
+        // ===============================
+        $adminRole = Role::firstOrCreate(['name' => 'Administrador']);
+        $profesorRole = Role::firstOrCreate(['name' => 'Profesor']);
+        $estudianteRole = Role::firstOrCreate(['name' => 'Estudiante']);
 
-        // ====== PERMISOS ======
+        // ===============================
+        //       PERMISOS
+        // ===============================
 
-        // Admin: todos los permisos
-        $allPermissions = Permission::all();
-        foreach ($allPermissions as $perm) {
-            RolePermission::create([
+        // ADMIN: todos los permisos
+        foreach (Permission::all() as $perm) {
+            RolePermission::firstOrCreate([
                 'role_id' => $adminRole->id,
                 'permission_id' => $perm->id,
             ]);
         }
 
-        // Profesor: ver todo
-        $profesorPermissions = Permission::whereNot('module', 'Users')->get();
+        // ===============================
+        //          PROFESOR
+        // ===============================
+
+        // Profesor: puede gestionar secciones/cursos y ver enrollments
+        // ❗ Quitamos cualquier permiso relacionado con Roles
+        $profesorPermissions = Permission::whereNotIn('module', ['Users', 'Roles'])->get();
 
         foreach ($profesorPermissions as $perm) {
 
-            // permisos específicos
-            $allowCreate = in_array($perm->name, ['createSections', 'createCourses']);
-            $allowUpdate = in_array($perm->name, ['updateSections', 'updateCourses']);
-            $allowDelete = in_array($perm->name, ['deleteSections', 'deleteCourses']);
-            $allowShow = str_starts_with($perm->name, 'show') && $perm->module !== 'Users';
+            $allowed = false;
 
-            if ($allowCreate || $allowUpdate || $allowDelete || $allowShow) {
-                RolePermission::create([
+            // Permisos de ver (menos usuarios y menos roles)
+            if (str_starts_with($perm->name, 'show') && !in_array($perm->module, ['Users', 'Roles'])) {
+                $allowed = true;
+            }
+
+            // Crear / editar / eliminar de Sections y Courses
+            if (in_array($perm->name, [
+                'createSections', 'updateSections', 'deleteSections',
+                'createCourses', 'updateCourses', 'deleteCourses'
+            ])) {
+                $allowed = true;
+            }
+
+            // Enrollments: show y update
+            if (in_array($perm->name, ['showEnrollments', 'updateEnrollments'])) {
+                $allowed = true;
+            }
+
+            if ($allowed) {
+                RolePermission::firstOrCreate([
                     'role_id' => $profesorRole->id,
                     'permission_id' => $perm->id,
                 ]);
             }
         }
 
-        // Estudiante: solo puede ver todo, y crear usuario
-        $studentPermissions = Permission::where(function ($q) {
-            $q->where('name', 'showSections')
-              ->orWhere('name', 'showCourses')
-              ->orWhere('name', 'showRoles')
-              ->orWhere(function ($sub) {
-                  $sub->where('module', 'Users')
-                      ->where('name', 'createUsers');
-              });
-        })->get();
+        // ===============================
+        //          ESTUDIANTE
+        // ===============================
 
-        foreach ($studentPermissions as $perm) {
-            RolePermission::create([
+        $studentAllowed = Permission::whereIn('name', [
+            'showSections',
+            'showCourses',
+            'createUsers',
+            'showEnrollments',
+            'createEnrollments',
+        ])->get();
+
+        foreach ($studentAllowed as $perm) {
+            RolePermission::firstOrCreate([
                 'role_id' => $estudianteRole->id,
                 'permission_id' => $perm->id,
             ]);
         }
 
-        // ====== USUARIOS DE EJEMPLO ======
-        User::create([
-            'name' => 'Admin Principal',
-            'email' => 'admin@plataforma.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('1234'),
-            'role_id' => $adminRole->id,
-        ]);
+        // ===============================
+        //        USUARIOS DEMO
+        // ===============================
 
-        User::create([
-            'name' => 'Profesor Ejemplo',
-            'email' => 'profesor@plataforma.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('1234'),
-            'role_id' => $profesorRole->id,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@plataforma.com'],
+            [
+                'name' => 'Admin Principal',
+                'email_verified_at' => now(),
+                'password' => Hash::make('1234'),
+                'role_id' => $adminRole->id,
+            ]
+        );
 
-        User::create([
-            'name' => 'Estudiante Ejemplo',
-            'email' => 'estudiante@plataforma.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('1234'),
-            'role_id' => $estudianteRole->id,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'profesor@plataforma.com'],
+            [
+                'name' => 'Profesor Ejemplo',
+                'email_verified_at' => now(),
+                'password' => Hash::make('1234'),
+                'role_id' => $profesorRole->id,
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'estudiante@plataforma.com'],
+            [
+                'name' => 'Estudiante Ejemplo',
+                'email_verified_at' => now(),
+                'password' => Hash::make('1234'),
+                'role_id' => $estudianteRole->id,
+            ]
+        );
     }
 }
-
 

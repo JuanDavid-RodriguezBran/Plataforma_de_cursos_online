@@ -41,27 +41,42 @@
                                         @csrf
 
                                         <div class="col-12">
-                                            <label for="name" class="form-label">Nombre completo</label>
-                                            <input type="text" id="name" name="name" value="{{ old('name') }}"
+                                            <label class="form-label">Nombre completo</label>
+                                            <input type="text" name="name" value="{{ old('name') }}"
                                                    class="form-control" required autofocus>
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="email" class="form-label">Correo electrónico</label>
-                                            <input type="email" id="email" name="email" value="{{ old('email') }}"
+                                            <label class="form-label">Correo electrónico</label>
+                                            <input type="email" name="email" value="{{ old('email') }}"
                                                    class="form-control" required>
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="password" class="form-label">Contraseña</label>
-                                            <input type="password" id="password" name="password"
+                                            <label class="form-label">Contraseña</label>
+                                            <input type="password" name="password"
                                                    class="form-control" required>
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                                            <input type="password" id="password_confirmation" name="password_confirmation"
+                                            <label class="form-label">Confirmar contraseña</label>
+                                            <input type="password" name="password_confirmation"
                                                    class="form-control" required>
+                                        </div>
+
+                                        {{-- SELECT DINÁMICO DE ROLES --}}
+                                        <div class="col-12">
+                                            <label class="form-label">Rol</label>
+                                            <select name="role_id" class="form-select" required>
+                                                <option value="">Seleccione un rol</option>
+
+                                                @foreach ($roles as $role)
+                                                    <option value="{{ $role->id }}"
+                                                        {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                                        {{ $role->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
 
                                         <div class="col-12">

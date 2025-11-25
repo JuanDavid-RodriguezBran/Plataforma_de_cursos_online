@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -10,38 +11,52 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     /**
-     * Store a newly created user in storage.
+     * Mostrar formulario de creación de usuario.
+     */
+    public function create()
+    {
+        $roles = Role::all(); // traer todos los roles dinámicos
+
+        return view('users.create', compact('roles'));
+    }
+
+    /**
+     * Guardar un usuario nuevo.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|string|in:student,teacher,admin',
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email',
+            'password'   => 'required|string|min:6|confirmed',
+            'role_id'    => 'required|exists:roles,id',
         ]);
 
         try {
-            // Asignar ID según el rol seleccionado
-            $roleId = match ($validated['role']) {
-                'admin' => 1,
-                'teacher' => 2,
-                'student' => 3,
-                default => throw new \Exception('Rol no válido')
-            };
 
-            $user = User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
+            User::create([
+                'name'     => $validated['name'],
+                'email'    => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role_id' => $roleId,
+                'role_id'  => $validated['role_id'],
             ]);
 
-            return redirect()->back()->with('success', 'Usuario creado correctamente.');
+            return redirect()
+                ->back()
+                ->with('success', 'Usuario creado correctamente.');
+
         } catch (\Exception $ex) {
+
             Log::error($ex);
-            // Mostrar el mensaje de error exacto en la vista
-            return redirect()->back()->withInput()->with(['error' => 'Error al crear el usuario', 'error_detail' => $ex->getMessage()]);
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with([
+                    'error'        => 'Error al crear el usuario',
+                    'error_detail' => $ex->getMessage(),
+                ]);
         }
     }
 }
+

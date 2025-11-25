@@ -57,4 +57,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Course::class, 'user_id', 'id');
     }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'user_id', 'id');
+    }
+
 }

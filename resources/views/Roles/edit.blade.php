@@ -13,6 +13,7 @@
     </div>
 
     <section class="section">
+
         {{-- Edit Role --}}
         <div class="card mt-3">
             <div class="card-header">
@@ -29,7 +30,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="name" value="{{ $role->name }}" required>
+                                <input type="text" class="form-control" name="name" value="{{ $role->name }}"
+                                    required>
                                 <label>Nombre</label>
                             </div>
                         </div>
@@ -50,11 +52,9 @@
 
                             @foreach ($module as $item)
                                 <div class="form-check form-switch">
-                                    <input type="checkbox"
-                                           class="form-check-input permission"
-                                           data-permission-id="{{ $item->id }}"
-                                           id="permission_{{ $item->id }}"
-                                           {{ $item->selected ? 'checked' : '' }}>
+                                    <input type="checkbox" class="form-check-input permission"
+                                        data-permission-id="{{ $item->id }}" id="permission_{{ $item->id }}"
+                                        {{ $item->selected ? 'checked' : '' }}>
                                     <label for="permission_{{ $item->id }}" class="form-check-label">
                                         {{ $item->description }}
                                     </label>
@@ -67,25 +67,27 @@
         </div>
 
         <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary" form="frmEdit" id="btnSave">Actualizar</button>
+            <button type="submit" class="btn btn-primary" form="frmEdit">Actualizar</button>
             <a href="{{ route('roles.index') }}" class="btn btn-secondary">Volver</a>
         </div>
     </section>
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('#btnSave').click(function() {
-            const permissions = $('.permission:checked');
-            let permissionIds = [];
+    <script>
+        $(document).ready(function() {
 
-            permissions.each(function() {
-                permissionIds.push($(this).data('permission-id'));
+            // CORRECCIÓN: generar JSON antes del submit
+            $('#frmEdit').on('submit', function() {
+                let ids = [];
+
+                $('.permission:checked').each(function() {
+                    ids.push($(this).data('permission-id'));
+                });
+
+                $('#permissions').val(JSON.stringify(ids));
             });
 
-            $('#permissions').val(JSON.stringify(permissionIds));
         });
-    });
-</script>
+    </script>
 @endpush
